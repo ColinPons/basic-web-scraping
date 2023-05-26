@@ -6,25 +6,37 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton,\
     QLabel, QLineEdit, QListWidget, QListWidgetItem, QAbstractItemView, QFileDialog
 
 def scrape_tags(url: str) -> List[Tuple[str, str]]:
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
+    try:
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, "html.parser")
 
-    tags = []
-    for tag in soup.find_all(True):
-        if tag.string:
-            tags.append((tag.name, tag.string.strip()))
+        tags = []
+        for tag in soup.find_all(True):
+            if tag.string:
+                tags.append((tag.name, tag.string.strip()))
 
-    return tags
+        return tags
+    
+    except Exception as e:
+        print(f"Error: {e}")
 
 def format_url(url: str) -> str:
     parsed = urlparse(url)
     scheme = parsed.scheme or "https"
     netloc = parsed.netloc or parsed.path
 
-    if not netloc.startswith("www."):
-        netloc = "www." + netloc
+    try:
+        if not netloc.startswith("www."):
+            try:
+                corrected_netloc = "www." + netloc
+                response = requests(corrected_netloc)
+                return scheme + "://" + corrected_netloc
+            
+            except Exception:
+                return scheme + "://" + netloc
 
-    return scheme + "://" + netloc
+    except Exception as e:
+        print(f"Error: {e}")
 
 class ScraperApp(QWidget):
 
