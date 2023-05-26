@@ -46,20 +46,25 @@ class ScraperApp(QWidget):
         self.url_input = QLineEdit(self)
         self.fetch_button = QPushButton("Fetch tags", self)
         self.tag_list = QListWidget(self)
+        self.clear_button = QPushButton("Clear Data", self)
 
         self.fetch_button.clicked.connect(self.fetch_tags)
+        self.clear_button.clicked.connect(self.clear_data)
 
+        # Creates app layout
         layout = QVBoxLayout(self)
         layout.addWidget(QLabel("URL:"))
         layout.addWidget(self.url_input)
         layout.addWidget(self.fetch_button)
         layout.addWidget(self.tag_list)
 
+        # Add clear button
+        layout.addWidget(self.clear_button)
+
         # Add functionality to export to csv
         self.tag_list.setSelectionMode(QAbstractItemView.MultiSelection)
         self.export_button = QPushButton("Export to CSV", self)
         self.export_button.clicked.connect(self.export_to_csv)
-
         layout.addWidget(self.export_button)
 
 
@@ -82,6 +87,9 @@ class ScraperApp(QWidget):
                 writer = csv.writer(file)
                 for item in self.tag_list.selectedItems():
                     writer.writerow([item.text()])
+
+    def clear_data(self) -> None:
+        self.tag_list.clear()
 
 def main() -> None:
 
