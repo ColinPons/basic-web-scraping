@@ -43,11 +43,13 @@ class ScraperApp(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
+        # Buttons
         self.url_input = QLineEdit(self)
         self.fetch_button = QPushButton("Fetch tags", self)
         self.tag_list = QListWidget(self)
         self.clear_button = QPushButton("Clear Data", self)
 
+        # Button actions
         self.fetch_button.clicked.connect(self.fetch_tags)
         self.clear_button.clicked.connect(self.clear_data)
 
@@ -66,7 +68,6 @@ class ScraperApp(QWidget):
         self.export_button = QPushButton("Export to CSV", self)
         self.export_button.clicked.connect(self.export_to_csv)
         layout.addWidget(self.export_button)
-
 
     def fetch_tags(self) -> None:
         url = self.url_input.text()
