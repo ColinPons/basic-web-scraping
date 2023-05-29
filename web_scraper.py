@@ -21,22 +21,19 @@ def scrape_tags(url: str) -> List[Tuple[str, str]]:
         print(f"Error: {e}")
 
 def format_url(url: str) -> str:
-    parsed = urlparse(url)
-    scheme = parsed.scheme or "https"
-    netloc = parsed.netloc or parsed.path
-
     try:
-        if not netloc.startswith("www."):
-            try:
-                corrected_netloc = "www." + netloc
-                response = requests(corrected_netloc)
-                return scheme + "://" + corrected_netloc
-            
-            except Exception:
-                return scheme + "://" + netloc
+        parsed = urlparse(url)
+        scheme = parsed.scheme or "https"
+        netloc = parsed.netloc or parsed.path
+
+        if not netloc.startswith("www.") and not netloc.endswith("toscrape.com"):
+            netloc = "www." + netloc
+
+        return scheme + "://" + netloc
 
     except Exception as e:
         print(f"Error: {e}")
+
 
 class ScraperApp(QWidget):
 
